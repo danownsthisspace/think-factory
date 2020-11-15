@@ -64,27 +64,10 @@
           </div>
         </div>
 
-        <div v-if="!error">
-          <router-link
-      class="btn btn-primary btn-sm"
-      :class="{'button-bottom' : isMobile, 'mt-5': !isMobile, 'float-right': !isMobile}"
-      :to="{ name: 'create-factory' }"
-      >Create a ThinkFactory</router-link
-    >
-        </div>
-
       </div>
     </div>
   </div>
 </template>
-
-<style>
-  .button-bottom {
-    position: fixed !important;
-    bottom: 10px;
-    width: 90%;
-  }
-</style>
 
 <script>
 import shared from "../shared";
@@ -163,7 +146,7 @@ export default {
         this.totalVotes += 1
         this.votes[answerKey] += 1
         this.voted = answerKey
-
+        alert("Vote submitted!");
       } catch (err) {
         console.log(err);
         alert("Could not vote, please try again");
