@@ -5,7 +5,7 @@
     <div class="alert alert-danger" role="alert" v-if="error">
       Error: Could not create a Think Factory. Please try again.
     </div>
-    <form v-on:submit.prevent="createThinkFactory">
+    <form v-on:submit.prevent="">
       <div class="form-group">
         <label class="mb-0" for="questionInput">Question:</label>
         <small class="form-text text-muted">e.g. Where should we eat?</small>
@@ -49,14 +49,16 @@
       </button>
     </form>  
   </div>
+  <div :class="{'container' : !isMobile}">
   <button
         :disabled="!formValid || submitting"
-        type="submit"
-        class="btn btn-success btn-lg button-bottom"
+        @click="createThinkFactory"
+        class="btn btn-success btn-lg"
+        :class="{'button-bottom' : isMobile, 'float-right': !isMobile}"
       >
         {{ submitting ? 'Sumbitting...' : 'Create'}}
       </button>
-    
+  </div>
   </div>
 </template>
 
@@ -78,11 +80,15 @@ import shared from "../shared";
 export default {
   data() {
     return {
+      isMobile: true,
       submitting: false,
       error: false,
       question: "",
       answers: [{ value: "" }, { value: "" }],
     };
+  },
+  mounted() {
+    this.isMobile = window.mobileAndTabletCheck()
   },
   computed: {
     formValid() {

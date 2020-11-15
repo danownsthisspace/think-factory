@@ -2,9 +2,9 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h3 v-if="!error && whatsAppMessage" class="mb-3">ThinkFactory code:  
+        <h4 v-if="!error && whatsAppMessage" class="mb-3 text-center">ThinkFactory code:  
           <a :href="'https://api.whatsapp.com/send?text=' + this.whatsAppMessage">{{ factoryId.toUpperCase() }}</a>
-        </h3>
+        </h4>
         <div v-if="error">
           <div class="alert alert-danger" role="alert">
             This ThinkFactory is no longer available or the room code is invalid
@@ -64,9 +64,10 @@
           </div>
         </div>
 
-        <div class="card" v-if="!error">
+        <div v-if="!error">
           <router-link
-      class="btn btn-primary btn-sm button-bottom"
+      class="btn btn-primary btn-sm"
+      :class="{'button-bottom' : isMobile, 'mt-5': !isMobile, 'float-right': !isMobile}"
       :to="{ name: 'create-factory' }"
       >Create a ThinkFactory</router-link
     >
@@ -90,6 +91,7 @@ import shared from "../shared";
 export default {
   data() {
     return {
+      isMobile: true,
       whatsAppMessage: "",
       error: false,
       voted: null,
@@ -102,7 +104,7 @@ export default {
     };
   },
   mounted() {
-    console.log("Component mounted.", this.$route.params.id);
+    this.isMobile = window.mobileAndTabletCheck();
     this.setUserId();
     this.getThinkFactory(this.factoryId);
     this.getVotes(this.factoryId);
