@@ -2,13 +2,20 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <div  v-if="!error && whatsAppMessage" class="text-center mb-3"> 
-          <h4 class="mb-1">ThinkFactory code:  
-          <a href="" @click.prevent="" id="code">{{ factoryId.toUpperCase() }}</a>
-        </h4>
-        <a :href="'https://api.whatsapp.com/send?text=' + this.whatsAppMessage" class="btn btn-link ">Share on whatsapp</a>
+        <div v-if="!error && whatsAppMessage" class="text-center mb-3">
+          <h4 class="mb-1">
+            ThinkFactory code:
+            <a href="" @click.prevent="" id="code">{{
+              factoryId.toUpperCase()
+            }}</a>
+          </h4>
+          <a
+            :href="'https://api.whatsapp.com/send?text=' + this.whatsAppMessage"
+            class="btn btn-link"
+            >Share on whatsapp</a
+          >
         </div>
-        
+
         <div v-if="error">
           <div class="alert alert-danger" role="alert">
             This ThinkFactory is no longer available or the room code is invalid
@@ -42,9 +49,7 @@
                   {{ factory[answerKey] }} ({{ count }} votes)
                 </div>
                 <div>
-                  <div v-if="voted === answerKey">
-                    Your vote
-                  </div>
+                  <div v-if="voted === answerKey">Your vote</div>
                   <button
                     v-if="canVote"
                     @click="vote(answerKey)"
@@ -67,7 +72,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -92,12 +96,13 @@ export default {
   },
   mounted() {
     this.isMobile = window.mobileAndTabletCheck();
-    this.setUserId();
-    this.getThinkFactory(this.factoryId);
-    this.getVotes(this.factoryId);
-    this.interval = setInterval( () => {
-      this.getVotes(this.factoryId)
-    }, 5000);
+    this.setUserId().then(() => {
+      this.getThinkFactory(this.factoryId);
+      this.getVotes(this.factoryId);
+      this.interval = setInterval(() => {
+        this.getVotes(this.factoryId);
+      }, 5000);
+    });
   },
   beforeDestroy() {
     if (this.interval) {
@@ -121,7 +126,7 @@ export default {
   methods: {
     async setUserId() {
       this.userId = await shared.getUserId();
-      this.getUserVote(this.userId)
+      this.getUserVote(this.userId);
     },
     async getThinkFactory(id) {
       try {
@@ -133,9 +138,11 @@ export default {
       }
     },
     async getUserVote(userId) {
-      const voteResponse = await axios.get(`/api/factory/${this.factoryId}/votes/${userId}`)
+      const voteResponse = await axios.get(
+        `/api/factory/${this.factoryId}/votes/${userId}`
+      );
       if (voteResponse.data) {
-        this.voted = voteResponse.data
+        this.voted = voteResponse.data;
       }
     },
     async vote(answerKey) {
@@ -147,9 +154,9 @@ export default {
             answerKey,
           }
         );
-        this.totalVotes += 1
-        this.votes[answerKey] += 1
-        this.voted = answerKey
+        this.totalVotes += 1;
+        this.votes[answerKey] += 1;
+        this.voted = answerKey;
         alert("Vote submitted!");
       } catch (err) {
         console.log(err);
