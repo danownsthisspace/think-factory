@@ -73,7 +73,8 @@
           </div>
         </div>
         <router-link
-      class="btn btn-light btn-block mt-3"
+        v-if="!error"
+      class="btn btn-warning btn-block mt-3"
       :to="{ name: 'create-factory' }"
       >Create another ThinkFactory</router-link>
       </div>
