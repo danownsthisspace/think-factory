@@ -1,7 +1,10 @@
 <template>
   <div class="container">
-    <img class="logo" src="/img/logo.png" alt="ThinkFactory logo">
-    <p class="font-weight-light text-center">Democratic decision making.</p>
+    <div class="text-center">
+      <img class="logo" src="/img/logo.png" alt="ThinkFactory logo">
+      <p class="font-weight-light">Get group answers, easily.</p>
+    </div>
+    
     <input
       v-model="factoryId"
       class="form-control form-control-lg mb-2"
@@ -27,6 +30,8 @@
 <style scoped>
     .logo {
         width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
     }
 </style>
 

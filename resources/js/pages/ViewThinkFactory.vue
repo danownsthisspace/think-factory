@@ -2,9 +2,13 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h4 v-if="!error && whatsAppMessage" class="mb-3 text-center">ThinkFactory code:  
-          <a :href="'https://api.whatsapp.com/send?text=' + this.whatsAppMessage">{{ factoryId.toUpperCase() }}</a>
+        <div  v-if="!error && whatsAppMessage" class="text-center mb-3"> 
+          <h4 class="mb-1">ThinkFactory code:  
+          <a href="" @click.prevent="" id="code">{{ factoryId.toUpperCase() }}</a>
         </h4>
+        <a :href="'https://api.whatsapp.com/send?text=' + this.whatsAppMessage" class="btn btn-link ">Share on whatsapp</a>
+        </div>
+        
         <div v-if="error">
           <div class="alert alert-danger" role="alert">
             This ThinkFactory is no longer available or the room code is invalid
