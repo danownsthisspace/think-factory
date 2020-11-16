@@ -72,7 +72,12 @@
             </div>
           </div>
         </div>
+        <router-link
+      class="btn btn-light btn-block mt-3"
+      :to="{ name: 'create-factory' }"
+      >Create another ThinkFactory</router-link>
       </div>
+      
     </div>
   </div>
 </template>
