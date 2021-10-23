@@ -1,64 +1,80 @@
 <template>
   <div>
-  <div class="container bottom-space">
-    <h3>Create a ThinkFactory</h3>
-    <div class="alert alert-danger" role="alert" v-if="error">
-      Error: Could not create a Think Factory. Please try again.
-    </div>
-    <form v-on:submit.prevent="">
-      <div class="form-group">
-        <label class="mb-0" for="questionInput">Question:</label>
-        <small class="form-text text-muted">e.g. Where should we eat?</small>
-        <input
-          v-model="question"
-          type="text"
-          name="questionInput"
-          class="form-control"
-          placeholder="Enter question"
-          required
-        />
+    <div class="container bottom-space">
+      <h3>Create a ThinkFactory</h3>
+      <div class="alert alert-danger" role="alert" v-if="error">
+        Error: Could not create a Think Factory. Please try again.
       </div>
-      <div class="form-group">
-        <label class="mb-0">Possible Answers (2 minimum):</label>
-        <small class="form-text text-muted">e.g. Burger King</small>
-        <div v-for="(answer, index) in answers" :key="index">
-          <div class="input-group mb-3">
-            <input
-              v-model="answer.value"
-              type="text"
-              class="form-control"
-              :placeholder="`Enter answer ${index + 1}`"
-            />
-            <div class="input-group-append" v-if="answers.length > 2">
-              <button
-                @click.prevent="deleteAnswer(index)"
-                class="btn btn-outline-secondary"
-                type="button"
-              >
-                Remove
-              </button>
+      <form v-on:submit.prevent="">
+        <div class="form-group">
+          <label class="checkbox">
+            <input type="checkbox" v-model="makeAnonymous" />
+            Anonymous Voting?
+          </label>
+        </div>
+        <div class="form-group">
+          <div class="select">
+            <label class="mb-0" for="questionInput">Voting Period:</label>
+            <select v-model="votingPeriod">
+              <option value="1">1 day</option>
+              <option value="2">2 days</option>
+              <option value="7">7 days</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="mb-0" for="questionInput">Question:</label>
+          <small class="form-text text-muted">e.g. Where should we eat?</small>
+          <input
+            v-model="question"
+            type="text"
+            name="questionInput"
+            class="form-control"
+            placeholder="Enter question"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="mb-0">Possible Answers (2 minimum):</label>
+          <small class="form-text text-muted">e.g. Burger King</small>
+          <div v-for="(answer, index) in answers" :key="index">
+            <div class="input-group mb-3">
+              <input
+                v-model="answer.value"
+                type="text"
+                class="form-control"
+                :placeholder="`Enter answer ${index + 1}`"
+              />
+              <div class="input-group-append" v-if="answers.length > 2">
+                <button
+                  @click.prevent="deleteAnswer(index)"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <button
+          @click.prevent="addAnswerField"
+          class="btn btn-primary btn-sm float-right mb-5"
+        >
+          + Add
+        </button>
+      </form>
+    </div>
+    <div :class="{ container: !isMobile }">
       <button
-        @click.prevent="addAnswerField"
-        class="btn btn-primary btn-sm float-right mb-5"
-      >
-        + Add
-      </button>
-    </form>  
-  </div>
-  <div :class="{'container' : !isMobile}">
-  <button
         :disabled="!formValid || submitting"
         @click="createThinkFactory"
         class="btn btn-success btn-lg"
-        :class="{'button-bottom' : isMobile, 'float-right': !isMobile}"
+        :class="{ 'button-bottom': isMobile, 'float-right': !isMobile }"
       >
-        {{ submitting ? 'Sumbitting...' : 'Create'}}
+        {{ submitting ? "Sumbitting..." : "Create" }}
       </button>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -83,12 +99,14 @@ export default {
       isMobile: true,
       submitting: false,
       error: false,
+      makeAnonymous: false,
+      votingPeriod: "1",
       question: "",
       answers: [{ value: "" }, { value: "" }],
     };
   },
   mounted() {
-    this.isMobile = window.mobileAndTabletCheck()
+    this.isMobile = window.mobileAndTabletCheck();
   },
   computed: {
     formValid() {
@@ -113,6 +131,8 @@ export default {
         const formData = {
           userId,
           question: this.question,
+          votingPeriod: this.votingPeriod,
+          makeAnonymous: this.makeAnonymous,
           answers: this.answers.map(({ value }) => value),
         };
 

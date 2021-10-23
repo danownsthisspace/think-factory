@@ -6,6 +6,9 @@ export default {
             userId = response.data;
             localStorage.setItem("userId", userId);
         }
-        return userId
+        return userId;
+    },
+    getUsername: function() {
+        return localStorage.getItem("username");
     }
 };
